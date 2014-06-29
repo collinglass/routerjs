@@ -7,22 +7,6 @@
 */
 
 /*
-*	Hash store for routes
-*/
-var routes = {};
-
-/*
-*	Adds route to hash store
-*/
-function route (path, templateId, dataLoader, controller) {
-	routes[path] = {
-		templateId: templateId,
-		dataLoader: dataLoader,
-		controller: controller
-	};
-}
-
-/*
 *	Global element for routing
 */
 var el = null;  
@@ -31,28 +15,16 @@ var el = null;
 *	Main Router
 */
 function router () {
+	var data = history.state;
+	console.log("Executing router...");
 
-	//	Returns empty promise
-	function noop(){
-		return Promise.resolve();
-	};  
 	
-	// Set current url or set to root
-	var url = location.pathname || '/';
-
-	// Get route by url:
-	var route = routes[url];
-
 	// If we have a data loader then do promise stuff
-	if (route.dataLoader) {
-		(route.dataLoader||noop)()
-		.then(render.bind(null,route.templateId))
-		.then(set_view)
-		.then(route.controller || noop)
-		.then(function(template){
-			console.log("Rendered",route,"as",template);
-		}).catch(alert);
-	}
+	Promise.resolve(data)
+	.then(render)
+	.then(set_view)
+	.then(route.controller || noop)
+	.catch(alert);
 }
 
 /*
@@ -65,6 +37,40 @@ function set_view(html){
 	return el;
 }
 
+function route_data(url){
+	var route;
+	// Set current url or set to root
+	url = url || '/';
+
+	//	Returns empty promise
+	function noop(){
+		return Promise.resolve();
+	}; 
+
+	function config(route){
+		return Promise.resolve(reqwest("config.json"))
+		.then(function(data){
+			return data[route];
+		});
+	}; 
+	
+	// Get route by url:
+	url == "/" ? route = "home" : route = url.replace("/", "");
+	return config(route);
+}
+
+/*
+*	Render function to render file using swig.
+*/
+function render(data){
+	var file = data.template;
+	return reqwest(file).then(function(template){
+		var html = swig.render(template,{locals:data});
+		console.log("Rendering",file,"with",data,"as",html);
+		return html;
+	})
+}
+
 /*
 *	Add an event listener on click to prevent default and use history api
 */
@@ -73,20 +79,29 @@ window.addEventListener("click",function(e){
 	var tag = target.tagName.toLowerCase();
 	if(tag === "a"){
 		e.preventDefault(true);
-		history.pushState({},document.title,target.href);
-		router();
+		var url = target.pathname;
+		route_data(url).then(function(data){
+			history.pushState(data,document.title,url);
+			router();
+		})
 	}
 });
 
 /*
 *	Add an event listener on popstate
 */
-window.addEventListener("popstate",router);
+window.addEventListener("popstate", router);
 
 /*
 *	Add an event listener on load
 */
-window.addEventListener('load', router);
+window.addEventListener('load', function(){
+	var url = location.pathname || "/";
+	route_data(url).then(function(data){
+		history.pushState(data,document.title,url);
+		router();
+	})
+});
 
 
 
