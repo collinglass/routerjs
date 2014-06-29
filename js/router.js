@@ -16,10 +16,7 @@ var el = null;
 */
 function router () {
 	var data = history.state;
-	console.log("Executing router...");
-
 	
-	// If we have a data loader then do promise stuff
 	Promise.resolve(data)
 	.then(render)
 	.then(set_view)
@@ -37,15 +34,18 @@ function set_view(html){
 	return el;
 }
 
+//	Returns empty promise
+function noop(){
+	return Promise.resolve();
+}; 
+
+/*
+*	Resolve route and returns the data from config.
+*/
 function route_data(url){
 	var route;
 	// Set current url or set to root
 	url = url || '/';
-
-	//	Returns empty promise
-	function noop(){
-		return Promise.resolve();
-	}; 
 
 	function config(route){
 		return Promise.resolve(reqwest("config.json"))
@@ -68,6 +68,15 @@ function render(data){
 		var html = swig.render(template,{locals:data});
 		console.log("Rendering",file,"with",data,"as",html);
 		return html;
+	})
+}
+
+/*
+*	Returns the tabs from the config file
+*/
+function getTabs(){
+	return Promise.resolve(reqwest("config.json")).then(function(config){
+		return Object.keys(config);
 	})
 }
 
@@ -97,7 +106,17 @@ window.addEventListener("popstate", router);
 */
 window.addEventListener('load', function(){
 	var url = location.pathname || "/";
-	route_data(url).then(function(data){
+	getTabs().then(function(tabs){
+		return render({
+			template: "nav.html",
+			tabs: tabs
+		});
+	})
+	.then(function(html){
+		document.querySelector("#nav").innerHTML = html;
+	})
+	.then(route_data.bind(null,url))
+	.then(function(data){
 		history.pushState(data,document.title,url);
 		router();
 	})
