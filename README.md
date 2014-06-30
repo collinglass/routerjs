@@ -1,11 +1,23 @@
 # Router
 
-A light-weight client-side router.
+A light-weight FRP client-side router.
 
-Inspired by [this](http://joakimbeng.eu01.aws.af.cm/a-javascript-router-in-20-lines/) article by [Joakim Bengtson](https://gist.github.com/joakimbeng). 
-
-I started changing it to use the [HTML5 History API](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history) and use swig template language and then it turned into a huge learning experience.
+No wizardry, written to be readable and customizable.
 
 
-A shoutout to [Ranger Mauve](https://github.com/RangerMauve) for making it awesome. It should really should be under his github.
+## Docs
+
+	To be written.
+
+
+## TODO
+
+- Add controller logic
+- Replace swig with custom templating language.
+- Replace reqwest with custom ajax call.
+
+
+### Shoutout
+
+A shoutout to [Ranger Mauve](https://github.com/RangerMauve) for making it awesome. It should really be under his github.
 

@@ -2,7 +2,7 @@
 *
 *	Router.js
 *
-*	Written by RangerMauve and Collin Glass
+*	Pair Programmed by RangerMauve and Collin Glass
 *
 */
 
@@ -20,7 +20,7 @@ function router () {
 	Promise.resolve(data)
 	.then(render)
 	.then(set_view)
-	.then(route.controller || noop)
+	.then(controller || noop)
 	.catch(alert);
 }
 
