@@ -45,6 +45,25 @@ loadStream.subscribe(function(response) {
 });
 
 /*
+*	Set pop state stream
+*/
+popStateStream = Rx.Observable.fromEvent(window, 'popstate');
+
+/*
+*	Subscribe to popstate stream
+*	Get pathname and load html for previous route
+*/
+popStateStream.subscribe(function(e) {
+	e.preventDefault(true);
+	var route;
+	var url = window.location.pathname;
+	// render `response` to the DOM however you wish
+	url == "/" ? route = "home" : route = url.replace("/", "");
+
+	setHTML(route);
+});
+
+/*
 *	Render function to render file using swig.
 */
 function render(data){
