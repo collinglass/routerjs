@@ -6,22 +6,36 @@
 // *
 // */
 
+/*
+*	Set global elements
+*/
 var NAV = document.querySelector("#nav");
 var VIEW = document.querySelector("#view");
-var tabs;
 
+/*
+*	Set streams
+*/
 var loadStream;
 var configStream;
 var tabClickStream;
 var globalStream;
 
+/*
+*	Set config file stream
+*/
 configStream = Rx.Observable.returnValue('config.json');
 
+/*
+*	Load data from config file
+*/
 loadStream = configStream
 	.flatMap(function(requestUrl) {
 		return Rx.Observable.fromPromise(Promise.resolve(reqwest(requestUrl)));
 });
 
+/*
+*	Set subcribe function on config data stream
+*/
 loadStream.subscribe(function(response) {
 	var url = "/"
 	history.pushState(response, document.title, url);
@@ -69,6 +83,11 @@ function setHTML(route){
 	});
 }
 
+/*
+*	Set 'click' event stream on nav tabs
+*
+*	Called after tabs have been rendered to the dom
+*/
 function setTabStream(tabs) {
 	tabClickStream = Rx.Observable.fromEvent(tabs, 'click');
 
