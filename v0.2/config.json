@@ -1,0 +1,32 @@
+{
+	"pills": {
+		"home": {
+			"title": "Home Page",
+			"heading": "Welcome to our Home!",
+			"paragraph": "This is the paragraph!!",
+			"template": "home.html",
+			"controller": "home.js"
+		},
+		"page1": {
+			"title": "Page 1",
+			"heading": "This is page 1!",
+			"paragraph": "1 on 1 on 1on 1 on1!!",
+			"template": "page1.html",
+			"controller": "page1.js"
+		},
+		"page2": {
+			"title": "Page 2",
+			"heading": "This is page 2!",
+			"paragraph": "2222222222!!",
+			"template": "page2.html",
+			"controller": "page2.js"
+		},
+		"page3": {
+			"title": "Page 3",
+			"heading": "This is page 3!",
+			"paragraph": "Hola papel tres!!!!!",
+			"template": "page1.html",
+			"controller": "page3.js"
+		}
+	}
+}

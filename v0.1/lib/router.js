@@ -25,6 +25,18 @@ function router () {
 }
 
 /*
+*	Render function to render file using swig.
+*/
+function render(data){
+	var file = data.template;
+	return reqwest(file).then(function(template){
+		var html = swig.render(template,{locals:data});
+		console.log("Rendering",file,"with",data,"as",html);
+		return html;
+	})
+}
+
+/*
 *	Set view to the #view element
 */
 function set_view(html){
@@ -33,6 +45,8 @@ function set_view(html){
 	if (el) el.innerHTML = html;
 	return el;
 }
+
+// CONTROLLER
 
 //	Returns empty promise
 function noop(){
@@ -57,18 +71,6 @@ function route_data(url){
 	// Get route by url:
 	url == "/" ? route = "home" : route = url.replace("/", "");
 	return config(route);
-}
-
-/*
-*	Render function to render file using swig.
-*/
-function render(data){
-	var file = data.template;
-	return reqwest(file).then(function(template){
-		var html = swig.render(template,{locals:data});
-		console.log("Rendering",file,"with",data,"as",html);
-		return html;
-	})
 }
 
 /*
