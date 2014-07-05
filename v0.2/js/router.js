@@ -1,10 +1,10 @@
-// /*
-// *
-// *	Router.js
-// *
-// *	Pair Programmed by RangerMauve and Collin Glass
-// *
-// */
+/*
+*
+*	Router.js
+*
+*	Pair Programmed by RangerMauve and Collin Glass
+*
+*/
 
 /*
 *	Set global elements
@@ -34,7 +34,7 @@ loadStream = configStream
 });
 
 /*
-*	Set subcribe function on config data stream
+*	Subcribe to config data stream
 */
 loadStream.subscribe(function(response) {
 	var url = "/"
@@ -73,7 +73,8 @@ function setNav(){
 }
 
 /*
-*	Returns the tabs from the config file
+*	Sends the data to the render func and loads the
+*	returned html on the DOM
 */
 function setHTML(route){
 	var data = history.state.pills[route];
@@ -86,7 +87,7 @@ function setHTML(route){
 /*
 *	Set 'click' event stream on nav tabs
 *
-*	Called after tabs have been rendered to the dom
+*	Called after tabs have been rendered on the dom
 */
 function setTabStream(tabs) {
 	tabClickStream = Rx.Observable.fromEvent(tabs, 'click');
@@ -102,16 +103,6 @@ function setTabStream(tabs) {
 		setHTML(route);
 	});
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
